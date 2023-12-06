@@ -1,8 +1,8 @@
 # Install Local Cert with mkcert for Windows
-**Warning**:Install Localhost Cert on Windows and website, mkcert is a simple tool for making locally-trusted development certificates. It requires no configuration.
+**NOTE**:Install Localhost Cert on Windows and website, mkcert is a simple tool for making locally-trusted development certificates. It requires no configuration.
 
 ## Run Powershell
-**Warning**:Check if Policies restrictions:
+**NOTE**:Check if Policies restrictions:
 ```
 PS C:\cert> Get-ExecutionPolicy
 ```
@@ -11,7 +11,7 @@ PS C:\cert> Get-ExecutionPolicy
 PS C:\cert> Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
 ## Install Choco output
-**Warning**:Forcing web requests to allow TLS v1.2 (Required for requests to Chocolatey.org)
+**OutPut**:Forcing web requests to allow TLS v1.2 (Required for requests to Chocolatey.org)
 Getting latest version of the Chocolatey package for download.
 Not using proxy.
 Getting Chocolatey from https://community.chocolatey.org/api/v2/package/chocolatey/2.2.2.
@@ -47,7 +47,7 @@ Ensuring chocolatey.nupkg is in the lib folder
 PS C:\cert> choco install mkcert
 ```
 ## Install MKCERt output
-**Warning**:Created a new local CA 💥
+**OutPut**:Created a new local CA 💥
 Note: the local CA is not installed in the system trust store.
 Run "mkcert -install" for certificates to be trusted automatically ⚠️
 Created a new certificate valid for the following names 📜
@@ -60,7 +60,7 @@ It will expire on 6 March 2026 🗓
 PS C:\cert> mkcert hscert.com "*.hscert.com" hscert.test localhost 127.0.0.1 ::1
 ```
 ## Creation Cert Output
-**Warning**:Note: the local CA is not installed in the system trust store.
+**OutPut**:Note: the local CA is not installed in the system trust store.
 Run "mkcert -install" for certificates to be trusted automatically ⚠️
 Created a new certificate valid for the following names 📜
  - "hscert.com"
@@ -80,6 +80,74 @@ PS C:\cert> mkcert -install
 ## Install Cert Output
 **Warning**: The local CA is now installed in the system trust store! ⚡️
 
-
 ## Install NODEJS
+```
+PS C:\cert> winget install nodejs
+```
+**Output**: The `msstore` source requires that you view the following agreements before using.
+Terms of Transaction: https://aka.ms/microsoft-store-terms-of-transaction
+The source requires the current machine's 2-letter geographic region to be sent to the backend service to function properly (ex. "US").
+
+Do you agree to all the source agreements terms?
+[Y] Yes  [N] No: Y
+Found Node.js [OpenJS.NodeJS] Version 21.3.0
+This application is licensed to you by its owner.
+Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Downloading https://nodejs.org/dist/v21.3.0/node-v21.3.0-x64.msi
+  ██████████████████████████████  25.8 MB / 25.8 MB
+Successfully verified installer hash
+Starting package install...
+Successfully installed
+
+## Create index.js
+```
+const fs = require('fs')
+const key = fs.readFileSync('./localhost/localhost.decrypted.key')
+const cert = fs.readFileSync('./localhost/localhost.crt')
+const express = require('express')
+const app = express()
+
+app.get('/', (req, res, next) => {
+  res.status(200).send('Welcome to Cert Page!')
+})
+
+const https = require('https')
+const server = https.createServer({ key, cert }, app)
+
+const port = 3000
+server.listen(port, () => {
+  console.log(`Server is listening on https://localhost:${port}`)
+})
+```
+## Create index.js
+```
+PS C:\cert> choco install nodejs
+```
+**Output**: Chocolatey v2.2.2
+Installing the following packages:
+nodejs
+By installing, you accept licenses for the packages.
+Progress: Downloading nodejs.install 21.4.0... 100%
+nodejs.install v21.4.0
+nodejs.install package files install completed. Performing other installation steps.
+The package nodejs.install wants to run 'chocolateyInstall.ps1'.
+Note: If you don't run this script, the installation will fail.
+Note: To confirm automatically next time, use '-y' or consider:
+choco feature enable -n allowGlobalConfirmation
+Do you want to run the script?([Y]es/[A]ll - yes to all/[N]o/[P]rint): A
+Installing 64 bit version
+Installing nodejs.install...
+nodejs.install has been installed.
+nodejs.install may be able to be automatically uninstalled.
+ The install of nodejs.install was successful.
+  Software installed as 'msi', install location is likely default.
+Progress: Downloading nodejs 21.4.0... 100%
+nodejs v21.4.0 [Approved]
+nodejs package files install completed. Performing other installation steps.
+ The install of nodejs was successful.
+  Software installed to 'C:\ProgramData\chocolatey\lib\nodejs'
+Chocolatey installed 2/2 packages.
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+
+ 
 
