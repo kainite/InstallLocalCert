@@ -99,27 +99,7 @@ Successfully verified installer hash
 Starting package install...
 Successfully installed
 
-## Create index.js
-```
-const fs = require('fs')
-const key = fs.readFileSync('./localhost/localhost.decrypted.key')
-const cert = fs.readFileSync('./localhost/localhost.crt')
-const express = require('express')
-const app = express()
-
-app.get('/', (req, res, next) => {
-  res.status(200).send('Welcome to Cert Page!')
-})
-
-const https = require('https')
-const server = https.createServer({ key, cert }, app)
-
-const port = 3000
-server.listen(port, () => {
-  console.log(`Server is listening on https://localhost:${port}`)
-})
-```
-## Create index.js
+## Install NODEJS using Choco
 ```
 PS C:\cert> choco install nodejs
 ```
@@ -149,5 +129,41 @@ nodejs package files install completed. Performing other installation steps.
 Chocolatey installed 2/2 packages.
  See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
 
- 
+## Install NodeJS Express
+``` 
+PS C:\cert> npm install express
+```
+added 62 packages, and audited 64 packages in 3s
+
+11 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+## Create index.js
+```
+const fs = require('fs')
+const key = fs.readFileSync('./ca/hscert.com+5-key.pem')
+const cert = fs.readFileSync('./ca/hscert.com+5.pem')
+
+const express = require('express')
+const app = express()
+
+app.get('/', (req, res, next) => {
+  res.status(200).send('Welcome to Cert Page!')
+})
+
+const https = require('https')
+const server = https.createServer({ key, cert }, app)
+
+const port = 3000
+server.listen(port, () => {
+  console.log(`Server is listening on https://localhost:${port}`)
+})
+```
+## Run Node Server
+```
+PS C:\cert> node index.js
+```
+Server is listening on https://localhost:3000
 
